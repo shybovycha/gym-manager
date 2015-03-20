@@ -1,4 +1,15 @@
 Rails.application.routes.draw do
+  resources :clubs
+
+  resources :workouts
+
+  resources :members
+
+  devise_for :users
+  resources :rails
+
+  resources :owners
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
