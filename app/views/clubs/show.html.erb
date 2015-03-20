@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @club.name %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @club.address %>
+</p>
+
+<p>
+    <strong>Members:</strong>
+
+    <ul>
+        <% @club.members.each do |member| %>
+            <li>
+              <%= link_to member.name, club_member_path(@club, member) %> 
+              <span>&nbsp;|&nbsp;</span>
+              <%= link_to 'Kick', kick_club_member_path(@club, member) %>
+            </li>
+        <% end %>
+    </ul>
+</p>
+
+<%= link_to 'Edit', edit_club_path(@club) %> |
+<%= link_to 'Back', clubs_path %>

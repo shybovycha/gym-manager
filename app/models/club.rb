@@ -1,0 +1,5 @@
+class Club < ActiveRecord::Base
+    belongs_to :owner
+    has_many :workouts
+    has_and_belongs_to_many :members, through: :member_clubs
+end

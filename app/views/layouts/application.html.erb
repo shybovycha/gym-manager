@@ -2,11 +2,27 @@
 <html>
 <head>
   <title>GymManager</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+
+<div>
+    <% if owner_signed_in? %>
+        <%= link_to 'Sign out', destroy_owner_session_path %>
+    <% elsif member_signed_in? %>
+        <%= link_to 'Sign out', destroy_member_session_path %>
+    <% else %>
+        <%= link_to 'Sign up as member', new_member_registration_path %>
+        <span>&nbsp;|&nbsp;</span>
+        <%= link_to 'Member login', new_member_session_path %>
+        <span>&nbsp;|&nbsp;</span>
+        <%= link_to 'Sign up as owner', new_owner_registration_path %>
+        <span>&nbsp;|&nbsp;</span>
+        <%= link_to 'Owner login', new_owner_session_path %>
+    <% end %>
+</div>
 
 <%= yield %>
 

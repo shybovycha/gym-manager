@@ -1,0 +1,39 @@
+<h1>Listing clubs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Address</th>
+      <% if owner_signed_in? or member_signed_in? %>
+        <th colspan="4">Actions</th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @clubs.each do |club| %>
+      <tr>
+        <td><%= club.name %></td>
+        <td><%= club.address %></td>
+        <% if owner_signed_in? and current_owner.is_owner?(club) %>
+          <td><%= link_to 'Show', club %></td>
+          <td><%= link_to 'Edit', edit_club_path(club) %></td>
+        <% elsif member_signed_in? %>
+          <td>
+            <% if current_member.is_member_of?(club) %>
+              <%= link_to 'Leave', leave_club_path(club) %>
+            <% else %>
+              <%= link_to 'Join', join_club_path(club) %>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<% if owner_signed_in? and current_owner.has_no_club? %>
+  <%= link_to 'New Club', new_club_path %>
+<% end %>
