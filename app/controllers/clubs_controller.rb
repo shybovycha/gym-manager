@@ -61,7 +61,7 @@ class ClubsController < ApplicationController
     end
 
     def check_ownership
-      if owner_signed_in? and current_owner.is_owner?(@club)
+      if owner_signed_in? and current_owner.is_owner_of?(@club)
         yield
       else
         raise "You are not owing this club"

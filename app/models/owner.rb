@@ -4,7 +4,7 @@ class Owner < ActiveRecord::Base
 
     has_one :club
 
-    def is_owner?(of_club)
+    def is_owner_of?(of_club)
         club == of_club
     end
 

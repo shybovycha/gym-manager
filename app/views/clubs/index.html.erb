@@ -16,18 +16,19 @@
       <tr>
         <td><%= club.name %></td>
         <td><%= club.address %></td>
-        <% if owner_signed_in? and current_owner.is_owner?(club) %>
-          <td><%= link_to 'Show', club %></td>
-          <td><%= link_to 'Edit', edit_club_path(club) %></td>
-        <% elsif member_signed_in? %>
-          <td>
+        <td>
+          <%= link_to 'Show', club %>
+
+          <% if owner_signed_in? and current_owner.is_owner_of?(club) %>
+            <%= link_to 'Edit', edit_club_path(club) %>
+          <% elsif member_signed_in? %>
             <% if current_member.is_member_of?(club) %>
               <%= link_to 'Leave', leave_club_path(club) %>
             <% else %>
               <%= link_to 'Join', join_club_path(club) %>
             <% end %>
-          </td>
-        <% end %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

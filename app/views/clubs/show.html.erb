@@ -10,19 +10,51 @@
   <%= @club.address %>
 </p>
 
+<% if owner_signed_in? and current_owner.is_owner_of?(@club) %>
+  <p>
+      <strong>Members:</strong>
+
+      <ul>
+          <% @club.members.each do |member| %>
+              <li>
+                <%= link_to member.name, club_member_path(@club, member) %>
+                <span>&nbsp;|&nbsp;</span>
+                <%= link_to 'Kick', kick_club_member_path(@club, member) %>
+              </li>
+          <% end %>
+      </ul>
+  </p>
+<% end %>
+
 <p>
-    <strong>Members:</strong>
+    <strong>Workouts:</strong>
 
     <ul>
-        <% @club.members.each do |member| %>
-            <li>
-              <%= link_to member.name, club_member_path(@club, member) %> 
-              <span>&nbsp;|&nbsp;</span>
-              <%= link_to 'Kick', kick_club_member_path(@club, member) %>
-            </li>
-        <% end %>
+      <% @club.workouts.each do |workout| %>
+        <li>
+          <%= workout.title %>
+          <span>&nbsp;|&nbsp;</span>
+
+          <% if owner_signed_in? %>
+            <%= link_to 'Edit', edit_club_workout_path(@club, workout) %>
+          <% elsif member_signed_in? %>
+            <% if current_member.is_member_of?(@club) %>
+              <% if current_member.has_workout?(workout) %>
+                <%= link_to 'Leave', leave_club_workout_path(@club, workout) %>
+              <% else %>
+                <%= link_to 'Join', join_club_workout_path(@club, workout) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
     </ul>
+
+    <% if member_signed_in? and current_member.is_member_of?(@club) %>
+      <%= link_to 'New workout', new_club_workout_path(@club) %>
+    <% end %>
 </p>
+
 
 <%= link_to 'Edit', edit_club_path(@club) %> |
 <%= link_to 'Back', clubs_path %>

@@ -10,9 +10,13 @@
 
 <div>
     <% if owner_signed_in? %>
+        <%= link_to 'Account', edit_owner_registration_path(current_owner) %>
+        <span>&nbsp;|&nbsp;</span>
         <%= link_to 'Sign out', destroy_owner_session_path %>
     <% elsif member_signed_in? %>
-        <%= link_to 'Sign out', destroy_member_session_path %>
+      <%= link_to 'Account', edit_member_registration_path(current_member) %>
+      <span>&nbsp;|&nbsp;</span>
+      <%= link_to 'Sign out', destroy_member_session_path %>
     <% else %>
         <%= link_to 'Sign up as member', new_member_registration_path %>
         <span>&nbsp;|&nbsp;</span>

@@ -1,5 +1,7 @@
 class WorkoutsController < ApplicationController
-  before_action :set_workout, only: [:show, :edit, :update, :destroy]
+  before_action :set_club
+  before_action :set_workout, only: [:show, :edit, :update, :destroy, :leave, :join]
+  before_action :check_membership, only: [:new, :create, :leave, :join]
 
   respond_to :html
 
@@ -21,19 +23,33 @@ class WorkoutsController < ApplicationController
   end
 
   def create
-    @workout = Workout.new(workout_params)
-    @workout.save
-    respond_with(@workout)
+    @workout = @club.workouts.create(workout_params)
+
+    if member_signed_in?
+      current_member.workouts << @workout
+    end
+
+    redirect_to @club
   end
 
   def update
     @workout.update(workout_params)
-    respond_with(@workout)
+    redirect_to @club
   end
 
   def destroy
     @workout.destroy
-    respond_with(@workout)
+    redirect_to @club
+  end
+
+  def join
+    @workout.members << current_member
+    redirect_to request.referer
+  end
+
+  def leave
+    @workout.members.delete current_member
+    redirect_to request.referer
   end
 
   private
@@ -41,7 +57,17 @@ class WorkoutsController < ApplicationController
       @workout = Workout.find(params[:id])
     end
 
+    def set_club
+      @club = Club.find(params[:club_id])
+    end
+
     def workout_params
       params.require(:workout).permit(:title)
+    end
+
+    def check_membership
+      unless member_signed_in? or current_member.is_member_of?(@club)
+        raise "You are not a member of this club"
+      end
     end
 end

@@ -1,5 +1,6 @@
 class MembersController < ApplicationController
-  before_action :set_member_and_club, only: [:show, :edit, :update, :destroy, :kick]
+  before_action :set_member, only: [:show, :edit, :update, :destroy, :kick]
+  before_action :set_club
   before_action :check_membership, only: [:kick]
 
   respond_to :html
@@ -43,8 +44,11 @@ class MembersController < ApplicationController
   end
 
   private
-    def set_member_and_club
+    def set_member
       @member = Member.find(params[:id])
+    end
+
+    def set_club
       @club = Club.find(params[:club_id])
     end
 
